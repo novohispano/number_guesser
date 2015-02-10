@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -12,10 +11,15 @@ func main() {
 	fmt.Println("Welcome to Number Guesser!")
 	number := generateRandomNumber()
 	var guess int
+	var err error
 	for number != guess {
 		fmt.Print("Enter your guess: ")
-		guess = getInputFromUser()
-		evaluateUserGuess(number, guess)
+		guess, err = getInputFromUser()
+		if err != nil {
+			fmt.Println("The guess is not a number.")
+		} else {
+			evaluateUserGuess(number, guess)
+		}
 	}
 }
 
@@ -24,11 +28,11 @@ func generateRandomNumber() int {
 	return rand.Intn(100)
 }
 
-func getInputFromUser() int {
-	var guess string
-	fmt.Scanln(&guess)
-	number, _ := strconv.Atoi(strings.TrimSpace(guess))
-	return number
+func getInputFromUser() (int, error) {
+	var input string
+	fmt.Scanln(&input)
+	guess, error := strconv.Atoi(input)
+	return guess, error
 }
 
 func evaluateUserGuess(number int, guess int) {
